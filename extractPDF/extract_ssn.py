@@ -4,16 +4,18 @@ from PyPDF2 import PdfReader, PdfWriter, PdfFileReader
 
 if __name__ == '__main__':
 
+    #dir = os.path.dirname(__file__)
+
     # Windows python - keep spaces in path 
-    path = "outputs/"
+    path = os.path.realpath( "../data/w2/outputs/pdfs")
 
     dir_list = os.listdir(path)
-    log = open("name_ssn.csv", "a")
+    log = open(os.path.realpath("../data/w2/summary.txt"), "a")
 
     name_ssn = {}
 
     for f in dir_list:
-        in_file = PdfReader(open(path + f, "rb"))
+        in_file = PdfReader(open(path + "/" + f, "rb"))
         pageObj = in_file.pages[0]
 
         v = pageObj.extract_text().split("\n")

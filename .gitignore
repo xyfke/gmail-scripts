@@ -1,5 +1,6 @@
 **/inputs
 **/credentials.json
-**/token.json
+**/token*.json
 **/output*
 **/test.txt
+/data/*

@@ -74,3 +74,11 @@ This section covers additional tasks which is a result of queries made above.
 ### Auto draft W2s that require resending
 
 The corrected W2s needs to be resent to the temp. Autodraft all of the emails and send by hand just for quick review before sending.
+
+## References
+
+Usage limits breakdown: https://developers.google.com/gmail/api/reference/quota
+
+Gmail API Pydoc: https://developers.google.com/resources/api-libraries/documentation/gmail/v1/python/latest/index.html
+
+Gmail API quick access guides: https://developers.google.com/gmail/api/guides

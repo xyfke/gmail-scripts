@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # Windows python - keep spaces in path 
     path = "C:/Users/Accounting Admin/Documents/Paycheck City W2/Regenerated/"
 
-    output_path = "outputs/"
+    output_path = "../data/w2-EIN/outputs/pdfs/"
 
     dir_list = os.listdir(path)
     pages = [3,4,5,6]
@@ -33,7 +33,7 @@ if __name__ == '__main__':
             for page_num in pages:
                 pdfWriter.add_page(pdf.pages[page_num])
 
-            with open(output_path + f, 'wb') as out_file:
+            with open(os.path.realpath(output_path + f), 'wb') as out_file:
                 pdfWriter.write(out_file)
                 out_file.close()
 

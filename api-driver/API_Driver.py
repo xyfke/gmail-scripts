@@ -20,7 +20,7 @@ import API_Message
 
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/gmail.compose"]
+SCOPES = ["https://www.googleapis.com/auth/gmail.compose", "https://www.googleapis.com/auth/gmail.readonly"]
 
 output_path = "output/"
 
@@ -51,11 +51,12 @@ def connect_service():
     try:
         # Call the Gmail API
         service = build("gmail", "v1", credentials=creds)
-        #query = "in:sent has:attachment after:2025/01/30"
-        #API_Search.get_message_queries(service, query, "w2_summary.csv", False, API_Search.extract_basic_info)
-        #get_messages(service)
 
-        API_Message.create_draft(service, r"../data/w2/inputs/send_list.txt")
+        # Track all attachments coming rom w2 email
+        query = "in:sent has:attachment after:2025/01/30"
+        API_Search.get_message_queries(service, query, "w2_summary.csv", False, API_Search.extract_basic_info)
+
+        #API_Message.create_draft(service, r"../data/w2/inputs/send_list.txt")
 
         #get_message_debug(service)
 

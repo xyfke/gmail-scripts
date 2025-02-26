@@ -8,14 +8,14 @@ from datetime import datetime
 from typing import IO
 from collections.abc import Callable
 
-output_path = "output/"
+output_path = "../data/w2-EIN/outputs/"
 
 def extractHeaders(headers : list) -> dict:
     """ Extract message header information
 
     Args:
         headers (list): a list of (name, value) pairs of header content
-        
+
     Returns:
         dict: a dictionary of contents in (name, value) pair
     """
@@ -35,7 +35,7 @@ def extract_basic_info(service, messages : dict, output_file : IO, error_file : 
         output_file (IO): output file object
         error_file (IO): error file object
     """
-    test = open("test.txt", "a")
+    print("Date\tSubject\tFrom\tTo\tName or SSN\tFilenames", file=output_file)
     for message in messages:
         m_id = message["id"]
         mail = service.users().messages().get(userId='me', id=m_id).execute()
@@ -43,17 +43,16 @@ def extract_basic_info(service, messages : dict, output_file : IO, error_file : 
         try:
             header_dict = extractHeaders(mail['payload']['headers'])
             fr = re.findall(r"\<(.*?)\>", header_dict['From'])[0]
+
             try:
+                # Some to may not have name
                 to= re.findall(r"\<(.*?)\>", header_dict['To'])[0]
             except:
                 to = header_dict['To']
             subject = header_dict['Subject']
             date = datetime.strptime(header_dict['Date'], '%a, %d %b %Y %H:%M:%S %z')
-            #subject, date, to = "", "", ""
             filename_arr = []
             name_or_ssn = None
-
-
 
             # Parse attachment portion
             for part in mail['payload']['parts']:
@@ -69,7 +68,7 @@ def extract_basic_info(service, messages : dict, output_file : IO, error_file : 
 
             print("{}\t{}\t{}\t{}\t{}\t{}".format(date, subject, fr, to, name_or_ssn, filename), file=output_file)
         except:
-            print(m_id, file=test)
+            print(m_id, file=error_file)
             #print(json.dumps(mail, sort_keys=True, indent=4), file=test)
             #print(header_dict)
             #break
@@ -88,9 +87,9 @@ def get_message_queries(service, query : str, filename : str, mark_complete : bo
         parse_func (Callable) : the parsing function
     """
 
-    result = open(output_path + filename, "a")
-    error_log = open(output_path + "error.txt", "a")
-    print("Date\tSubject\tFrom\tTo\tName or SSN\tFilenames", file=result)
+    result = open(os.path.realpath(output_path + filename), "a")
+    error_log = open(os.path.realpath(output_path + "error.txt"), "a")
+    
 
     page_token = ""    # first token
     count = 0       # count number of emails
@@ -104,6 +103,7 @@ def get_message_queries(service, query : str, filename : str, mark_complete : bo
 
         parse_func(service, messages, result, error_log)
 
+        # check to see if there are additional messages
         if ("nextPageToken" in results):
             page_token = results["nextPageToken"]
         else:

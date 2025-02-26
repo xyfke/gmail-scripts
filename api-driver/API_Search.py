@@ -54,12 +54,21 @@ def extractHeaders(headers : list) -> dict:
 
     return header_dict
 
+def extract_thread_info(service, threads : list, output_file : IO, error_file : IO) -> None:
+    """Go through each thread and create a summary of informaiton
 
-def extract_basic_info(service, messages : dict, output_file : IO, error_file : IO) -> None:
+    Args:
+        service (_type_): Used to make additional API calls with each message
+        threads (list): a list of threads to process
+        output_file (IO): the summary file
+        error_file (IO): any error that arises
+    """
+
+def extract_basic_info(service, messages : list, output_file : IO, error_file : IO) -> None:
     """Parse message and extract basic information (date, to, from, subject, attachments) to output file
 
     Args:
-        messages (dict): message object obtained from gmail API request
+        messages (list): message object obtained from gmail API request
         output_file (IO): output file object
         error_file (IO): error file object
     """
@@ -106,6 +115,18 @@ def extract_basic_info(service, messages : dict, output_file : IO, error_file : 
             #break
     
     #test.close()
+
+def get_thread_queries(service, query : str, summary : str, mark_complete : bool, parse_func : Callable) -> None:
+    """ Retrieve and process each thread in the query
+
+    Args:
+        service (_type_): Google API services
+        query (str): email query
+        filename (str): name of file to store results
+        mark_complete (bool): whether or not to add column mark_complete
+        parse_func (Callable) : the parsing function
+    """
+    
 
 
 def get_message_queries(service, query : str, filename : str, mark_complete : bool, parse_func : Callable) -> None:

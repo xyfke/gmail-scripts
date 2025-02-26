@@ -14,7 +14,7 @@ from email.mime.text import MIMEText
 
 from googleapiclient.discovery import build
 
-pdf_location = r"C:\Users\Accounting Admin\Documents\fafa-github\gmail-scripts\data\w2\outputs\pdfs"
+pdf_location = "../data/w2-EIN/outputs/pdfs"
 
 
 def create_draft(service, input : str):
@@ -26,7 +26,7 @@ def create_draft(service, input : str):
     """
 
     emps = open(os.path.realpath(input), "r")
-    log = open(os.path.realpath("../data/w2/draft_log.txt"), "a")
+    log = open(os.path.realpath("../data/w2-EIN/draft_log.txt"), "a")
 
     count = 0
 
@@ -34,6 +34,7 @@ def create_draft(service, input : str):
         name, email, has_two = line.strip().split("\t")
         draft_message(service, name, email, has_two, log)
         count += 1
+        break
     
     log.close()
 
@@ -75,14 +76,14 @@ def draft_message(service, name : str, email : str, has_two : str, log : IO):
     # Attempt to add attachment
     # If it fails, then make a note in the log file, but the draft will still be created for manually adding
     try:
-        f1 = pdf_location + "\\" + name + " W2.pdf"
+        f1 = os.path.realpath(pdf_location + "/" + name + " W2.pdf")
         with open(f1, "rb") as fi:
             part = MIMEApplication(fi.read(), Name=os.path.basename(f1))
             part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(f1)
             mime_message.attach(part)
 
         if has_two == "TRUE":
-            f2 = pdf_location + "\\" + name + " W2 (1).pdf"
+            f2 = os.path.realpath(pdf_location + "/" + name + " W2 (1).pdf")
             with open(f1, "rb") as fi:
                 part = MIMEApplication(fi.read(), Name=os.path.basename(f2))
                 part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(f2)

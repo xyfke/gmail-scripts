@@ -10,7 +10,15 @@ from collections.abc import Callable
 
 output_path = "output/"
 
-def extractHeaders(headers : list):
+def extractHeaders(headers : list) -> dict:
+    """ Extract message header information
+
+    Args:
+        headers (list): a list of (name, value) pairs of header content
+        
+    Returns:
+        dict: a dictionary of contents in (name, value) pair
+    """
     header_dict = {}
 
     for header in headers:

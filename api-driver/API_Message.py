@@ -18,9 +18,8 @@ pdf_location = r"C:\Users\Accounting Admin\Documents\fafa-github\gmail-scripts\d
 
 
 def create_draft(service, input : str):
-    """
-    Based on the input text file, process each entries in the file to create gmail drafts for review
-    prior to send.
+    """ Based on the input text file, process each entries in the file to create gmail drafts for review
+        prior to send.
     Args:
         service (Any): Google service tool to connect to gmail API
         input (str): path of text file with temp name, email and flag indicating how many W2s they have
@@ -40,9 +39,9 @@ def create_draft(service, input : str):
 
 
 def draft_message(service, name : str, email : str, has_two : str, log : IO):
-    """
-    Based on the input text file, process each entries in the file to create gmail drafts for review
-    prior to send.
+    """Based on the input text file, process each entries in the file to create gmail drafts for review
+        prior to send.
+
     Args:
         service (Any): Google service tool to connect to gmail API
         name (str): name of temp

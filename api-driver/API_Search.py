@@ -9,6 +9,34 @@ from typing import IO
 from collections.abc import Callable
 
 output_path = "../data/w2-EIN/outputs/"
+label_path = "../data/labels/label.txt"
+recipients = set()
+
+def get_labels(service) -> list:
+    list_labels = []
+
+    if os.path.isfile(os.path.realpath(label_path)):
+        label_file = open(os.path.realpath(label_path), "r")
+        for label in label_file:
+            list_labels.append(label.strip())
+        label_file.close()
+    else:
+        label_file = open(os.path.realpath(label_path), "a")
+        results = service.users().labels().list(userId="me").execute()
+        labels = results.get("labels", [])
+
+        if not labels:
+            print("No labels found.")
+            return
+        #print("Labels:")
+        for label in labels:
+            list_labels.append(label['name'])
+            print(label['name'], file=label_file)
+
+        label_file.close()
+
+    return list_labels
+
 
 def extractHeaders(headers : list) -> dict:
     """ Extract message header information
@@ -35,7 +63,6 @@ def extract_basic_info(service, messages : dict, output_file : IO, error_file : 
         output_file (IO): output file object
         error_file (IO): error file object
     """
-    print("Date\tSubject\tFrom\tTo\tName or SSN\tFilenames", file=output_file)
     for message in messages:
         m_id = message["id"]
         mail = service.users().messages().get(userId='me', id=m_id).execute()
@@ -49,6 +76,11 @@ def extract_basic_info(service, messages : dict, output_file : IO, error_file : 
                 to= re.findall(r"\<(.*?)\>", header_dict['To'])[0]
             except:
                 to = header_dict['To']
+
+            if (to in recipients):
+                continue
+
+            recipients.add(to)
             subject = header_dict['Subject']
             date = datetime.strptime(header_dict['Date'], '%a, %d %b %Y %H:%M:%S %z')
             filename_arr = []
@@ -86,10 +118,11 @@ def get_message_queries(service, query : str, filename : str, mark_complete : bo
         mark_complete (bool): whether or not to add column mark_complete
         parse_func (Callable) : the parsing function
     """
+    recipients = set()
 
     result = open(os.path.realpath(output_path + filename), "a")
     error_log = open(os.path.realpath(output_path + "error.txt"), "a")
-    
+    print("Date\tSubject\tFrom\tTo\tName or SSN\tFilenames", file=result)
 
     page_token = ""    # first token
     count = 0       # count number of emails

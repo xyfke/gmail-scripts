@@ -56,20 +56,13 @@ def connect_service():
         #query = "in:sent has:attachment after:2025/01/30"
         #API_Search.get_message_queries(service, query, "w2_summary.csv", False, API_Search.extract_basic_info)
 
-        API_Message.create_draft(service, r"../data/w2-EIN/inputs/send_list.txt")
+        #API_Message.create_draft(service, r"../data/w2-EIN/inputs/send_list.txt")
 
         #get_message_debug(service)
 
+        API_Search.get_labels(service)
 
-        #results = service.users().labels().list(userId="me").execute()
-        #labels = results.get("labels", [])
-
-        #if not labels:
-        #  print("No labels found.")
-        #  return
-        #print("Labels:")
-        #for label in labels:
-        #  print(label["name"])
+     
 
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.

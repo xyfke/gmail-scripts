@@ -4,14 +4,16 @@
 
 - Setup gmail project and enable gmail API
 - Generate authentication tokens
+- Run the following command `pip install -r requirements.txt`
 
 ## Goal
 
 The motivation behind this project is to generate a summary of the requests received by the [w2@arrowworkforce.com](w2@arroworkforce.com) email. In addition, we also want to capture how effectively are the requests being handled (What has been done, what is still in progress).
 
+
 ## Limitations
 
-The gmail API has token limit per minute for each user and project. Since we do not have multiple users working on the same project, we will just use the token limit per user as to how many requests we can make. The user limit is **15,000 tokens / minute**
+The gmail API has a token limit per minute for each user and project. Since we do not have multiple users working on the same project, we will just use the token limit per user to calculate the maximum number of requests we can make. The user limit is **15,000 tokens / minute**
 
 The three main objects that we will be accessing from the gmail API will be **messages**, **threads**, and **drafts**. Below list the number of tokens required per request:
 
@@ -23,7 +25,7 @@ The three main objects that we will be accessing from the gmail API will be **me
 
 - drafts.create: 10 tokens
 
-We overcome this restriction by using a sleep timer which pauses the execution of the program by a minute before continuing on.
+We overcome the user restriction by adding a sleep timer which pauses the execution of the program by a minute in between to stay under the limit threshold.
 
 A thread typically consists of one or more related messages. Both threads and messages are searchable using query formats. The syntax of searching is displayed in this [table](https://support.google.com/mail/answer/7190).
 
